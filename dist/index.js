@@ -13,39 +13,71 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ GithubUser)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _useFetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./useFetch */ "./src/useFetch.js");
+
+
+function GithubUser({
+  login,
+  renderLoader,
+  renderData
+}) {
+  const {
+    data,
+    loader,
+    error
+  } = (0,_useFetch__WEBPACK_IMPORTED_MODULE_1__.useFetch)(`https://api.github.com/users/${login}`);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, loader && renderLoader, data && renderData(data), error && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("pre", {
+    style: {
+      color: "red"
+    }
+  }, error));
+}
+
+/***/ }),
+
+/***/ "./src/useFetch.js":
+/*!*************************!*\
+  !*** ./src/useFetch.js ***!
+  \*************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useFetch": () => (/* binding */ useFetch)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 
 const loadJSON = key => key && JSON.parse(localStorage.getItem(key));
 
 const saveJSON = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
-function GithubUser({
-  login
-}) {
-  const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(loadJSON(`user:${login}`));
+const getKey = s => "fetch:" + /[\w-_]*$/gi.exec(s)[0];
+
+const useFetch = uri => {
+  const storageKey = getKey(uri);
+  const [data, setData] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(loadJSON(storageKey));
+  const [loader, setLoader] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(data ? false : true);
+  const [error, setError] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!data) return;
-    if (data.login === login) return;
-    const {
-      name,
-      avatar_url,
-      location
-    } = data;
-    saveJSON(`user:${login}`, {
-      name,
-      login,
-      avatar_url,
-      location
-    });
+    if (!uri) return;
+
+    if (!data) {
+      console.log("do fetch");
+      setTimeout(() => {
+        fetch(uri).then(response => response.json()).then(setData).then(setLoader(false)).catch(setError);
+      }, 3000);
+    }
+  }, [uri]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    saveJSON(storageKey, data);
   }, [data]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (!login) return;
-    if (data.login === login) return;
-    fetch(`https://api.github.com/users/${login}`).then(response => response.json()).then(setData).catch(console.error);
-  }, [login]);
-  if (data) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("pre", null, JSON.stringify(data, null, 2));
-  return null;
-}
+  return {
+    data,
+    loader,
+    error
+  };
+};
 
 /***/ }),
 
@@ -29934,7 +29966,22 @@ __webpack_require__.r(__webpack_exports__);
 
 function App() {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_GithubUser__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    login: "moonhighway"
+    login: "moonhighway",
+    renderLoader: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h2", null, "Loading now."),
+    renderData: data => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
+      style: {
+        color: "pink",
+        display: "flex",
+        height: "150px",
+        margin: "15px 5px",
+        alignItems: "center",
+        textAlign: "center"
+      }
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", {
+      src: data.avatar_url,
+      height: 150,
+      width: 150
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h3", null, data.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, data.location)))
   });
 }
 react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(App, null), document.querySelector("#root"));

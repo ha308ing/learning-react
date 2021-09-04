@@ -1,37 +1,16 @@
-import React, { useState, useEffect } from "react"
-
-const loadJSON = (key) =>
-  key && JSON.parse(localStorage.getItem(key))
-
-const saveJSON = (key, data) =>
-  localStorage.setItem(key, JSON.stringify(data))
-
-export default function GithubUser({login}) {
-  const [data, setData] = useState(loadJSON(`user:${login}`))
-  useEffect(()=>{
-    if (!data) return
-    if (data.login === login) return
-    const {name, avatar_url, location} = data
-    saveJSON(`user:${login}`, {
-      name,
-      login,
-      avatar_url,
-      location
-    });
-  },[data])
-
-  useEffect(()=>{
-    if (!login) return
-    if (data.login === login) return
-    fetch(`https://api.github.com/users/${login}`).
-      then(response => response.json()).
-      then(setData).
-      catch(console.error)
-  },[login])
+import React from "react"
+import { useFetch } from "./useFetch"
 
 
-  if (data) 
-    return <pre>{JSON.stringify(data, null, 2)}</pre>
-  
-  return null
+export default function GithubUser( { login, renderLoader, renderData } ) {
+  const { data, loader, error } = useFetch( `https://api.github.com/users/${ login }` )
+
+
+  return (
+    <>
+      { loader && renderLoader }
+      { data && renderData( data ) }
+      { error && <pre style={ { color: "red" } }>{ error }</pre> }
+    </>
+  )
 }
