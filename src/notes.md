@@ -6,6 +6,9 @@
   - [4. Saving Data Locally](#4-saving-data-locally)
   - [5. Entire Component](#5-entire-component)
   - [6. Use HTTP Header for cache](#6-use-http-header-for-cache)
+  - [7. Handling Promise State](#7-handling-promise-state)
+  - [8. Render Props](#8-render-props)
+  - [9. Virtualized Lists](#9-virtualized-lists)
 
 ## 1. Sending Data with a request
 
@@ -122,3 +125,57 @@
 ## 6. Use HTTP Header for cache
 
 Set header for expiration date of content: `Cache-Control: max-age=<EXP_DATE>`
+
+## 7. Handling Promise State
+
+```
+import React, { useState, useEffect } from "react"
+
+export default function GithubUser( { login } ) {
+  const [ data, setData ] = useState()
+  const [ loading, setLoading ] = useState()
+  const [ error, setError ] = useState()
+
+  useEffect( () => {
+    if (!login) return
+    setLoading(true)
+    fetch( `https://api.github.com/users/${ login }` ).
+      then( response => response.json() ).
+      then( setData ).
+      then( () => setLoading(false) ).
+      catch(setError)
+   }, [login] )
+
+  if ( loading ) return <h1>Loading..</h1>
+
+  if ( error ) return <pre>JSON.stingify(error, null, 2)</pre>
+
+  if (!data) return null
+
+  return (
+    <div className="githubUser" style={{display:"flex", height:"150px"}}>
+      <img
+        src={ data.avatar_url }
+        alt={ data.login }
+        style={{width:200}} />
+      <div>
+        <h1>{data.login}</h1>
+        { data.name && <p>{ data.name }</p> }
+        { data.location && <p>{ data.location }</p> }
+      </div>
+    </div>
+  )
+
+}
+```
+
+## 8. Render Props
+
+## 9. Virtualized Lists
+
+Windowing or virualization.
+Show at least 5 reults an prepare 6 off screen (3 on top + 3 on bottom). So 11 to load.
+Unmount viewed results.
+[![image.png](https://i.postimg.cc/Yq9HqSNR/image.png)](https://postimg.cc/Z01gw4Mv "Windowing/Virtualization")
+
+

@@ -2,15 +2,14 @@ import React from "react"
 import { useFetch } from "./useFetch"
 
 
-export default function GithubUser( { login, renderLoader, renderData } ) {
-  const { data, loader, error } = useFetch( `https://api.github.com/users/${ login }` )
-
+export default function GithubUser( { login, renderLoading, renderData, renderError } ) {
+  const { data, loading, error } = useFetch( `https://api.github.com/users/${ login }` )
 
   return (
     <>
-      { loader && renderLoader }
+      { loading && renderLoading }
       { data && renderData( data ) }
-      { error && <pre style={ { color: "red" } }>{ error }</pre> }
+      { error && renderError( error )}
     </>
   )
 }
