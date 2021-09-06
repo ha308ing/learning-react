@@ -1,5 +1,6 @@
 import React from "react"
 import GithubUser from "./GithubUser"
+import RepoMenu from "./RepoMenu"
 
 export default function GithubUsers( {users} ) {
   return (
@@ -15,7 +16,6 @@ export default function GithubUsers( {users} ) {
                 style={{
                   color: "pink",
                   display: "flex",
-                  height: "100px",
                   margin: "15px 5px",
                   alignItems: "center",
                   textAlign: "center"
@@ -34,6 +34,7 @@ export default function GithubUsers( {users} ) {
                   <h1>{ data.login }</h1>
                   { data.name && <p>{ data.name }</p> }
                   { data.location && <p>{ data.location }</p> }
+                  { data.public_repos && <RepoMenu login={data.login} /> }
                 </div>
               </div>
             }

@@ -1,15 +1,21 @@
-import React from "react"
-import { useFetch } from "./useFetch"
+import React, { useState, useCallback,useEffect } from "react"
+import UserSearch from "./UserSearch"
+import UserDetails from "../book_examples/UserDetails"
+import Fetch from "../book_examples/Fetch"
 
+export default function GithubUser( { login = "eve" } ) {
 
-export default function GithubUser( { login, renderLoading, renderData, renderError } ) {
-  const { data, loading, error } = useFetch( `https://api.github.com/users/${ login }` )
+  const [ login_, setUser ] = useState( login )
 
   return (
     <>
-      { loading && renderLoading }
-      { data && renderData( data ) }
-      { error && renderError( error )}
+      <UserSearch handleSearch={setUser} user={login_} />
+      <Fetch
+        uri={ `https://api.github.com/users/${login_}` }
+        renderSuccess={ UserDetails }
+      />
     </>
   )
+
+
 }

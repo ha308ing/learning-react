@@ -22,7 +22,7 @@ export const useFetch = ( uri )  => {
       fetch( uri ).
         then( response => response.json() ).
         then( setData ).
-        then( setLoading( false ) ).
+        then( () => setLoading( false ) ).
         catch( setError )
       }, 3000 )
     }
@@ -30,38 +30,9 @@ export const useFetch = ( uri )  => {
 
   useEffect( () => {
     if (!data) return
-    let { avatar_url, name, location, login } = data
-    saveJSON( storageKey, { avatar_url, name, location, login } )
+    // let { avatar_url, name, location, login } = data
+    saveJSON( storageKey, data )
   }, [data] )
-
-  if ( loading ) return <h1>Loading</h1>
-
-  if ( error ) return <pre>JSON.stringify( error, null, 2 )</pre>
-
-  if (data)
-    return (
-      <div
-      style={{
-        color: "pink",
-        display: "flex",
-        height: "100px",
-        margin: "15px 5px",
-        alignItems: "center",
-        textAlign: "center"
-      }}
-    >
-      <img src={ data.avatar_url } alt={data.name} height={100} width={100} style={{clipPath:"circle(50px)"}} />
-      <div>
-        <h1>{ data.login }</h1>
-        {data.name && <p>{ data.name }</p>}
-        {data.location && <p>{ data.location }</p>}
-      </div>
-    </div>
-    )
-  
-  return null
-
-
 
   return {
     data,
