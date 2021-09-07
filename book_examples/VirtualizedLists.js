@@ -4,11 +4,11 @@ import { FixedSizeList } from "react-window"
 
 function List( { data=[], renderItem, renderEmpty } ) {
   if ( !data.length ) return renderEmpty
-  return <ul style={{listStyleType:"none", paddingLeft: "0"}}>{ data.map( ( item, i) => <li key={ i }>{ renderItem(item) }</li> ) }</ul>
+  return <ul style={{ listStyleType:"none", paddingLeft: "0" }}>{ data.map( ( item, i) => <li key={ i }>{ renderItem( item ) }</li> ) }</ul>
 }
 
 const users = 
-  [...Array(5000)].
+  [ ...Array( 5000 ) ].
     map( () => ({
       name: faker.name.findName(),
       email: faker.internet.email(),
@@ -28,14 +28,14 @@ export default function App() {
   //   />
   // )
 
-  const renderRow = ( {index, style} ) =>
-    <div style={{...style, ...{display: "flex", width:"80%", margin:"10px 10%", alignItems:"center", textAlign:"center"}}}>
+  const renderRow = ( { index, style } ) =>
+    <div style={{ ...style, ...{ display: "flex", width:"80%", margin:"10px 10%", alignItems:"center", textAlign:"center" } }}>
       <img
-        src={ users[index].avatar }
-        alt={ users[index].name }
+        src={ users[ index ].avatar }
+        alt={ users[ index ].name }
         width={ 50 }
-        style={{clipPath:"circle(25px)"}} />
-      <p style={{width:"100%"}}>{ users[index].name } - { users[index].email }</p>
+        style={{ clipPath:"circle(25px)" }} />
+      <p style={{ width:"100%" }}>{ users[ index ].name } - { users[ index ].email }</p>
     </div>
 
   return (
@@ -44,7 +44,7 @@ export default function App() {
       width={ 650 }
       itemCount={ users.length }
       itemSize={ 70 }
-      style={{borderRadius:".5rem", boxShadow:"0 0 1.5rem 0.5rem #eee"}}
+      style={{ borderRadius:".5rem", boxShadow:"0 0 1.5rem 0.5rem #eee" }}
     >
       {renderRow}
     </FixedSizeList>
