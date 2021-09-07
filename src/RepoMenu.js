@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from "react"
-import { useIterator } from "./useIterator"
-import {Fetch}  from "./Fetch"
-import { useFetch } from "./useFetch"
+import React, { useEffect } from "react"
+import { useIterator } from "./hooks/useIterator"
+import RepositoryReadme from "./RepositoryReadme"
 
-export function CurrentRepo({repoArray}) {
-  console.log(repoArray[0].name)
-  const [ {currentRepo}, next, prev ] = useIterator(repoArray, 0)
+export default function RepoMenu( { repositories, onSelect = f => f, login } ) {
+  const [ { name }, previous, next ] = useIterator( repositories )
+
+  useEffect( (  )=>{
+    if ( !name ) return
+    onSelect( name )
+  }, [ name ] )
+  
+  if ( repositories.length < 1 ) return <p>User { login } have no public repositories.</p>
+
   return (
     <>
-    <span onClick={()=>prev()}>&lt;</span>
-    <span>{currentRepo.name}</span>
-    <span onClick={()=>next()}>&gt;</span>
+      <div style={{ display:"flex" }}>
+        { repositories.length > 1 && <button onClick={ previous }>&lt;</button> }
+        <p>{ name }</p>
+        { repositories.length > 1 && <button onClick={ next }>&gt;</button> }
+      </div>
+      <RepositoryReadme login={ login } repo={ name } />
     </>
   )
 }
-
-export default function RepoMenu() {
-  const login = "moontahoe"
-  return (
-    <Fetch
-      uri={`https://api.github.com/users/${login}/repos`}
-      renderData={({data})=><CurrentRepo repoArray={data} />}
-    />
-  )
-}
-
