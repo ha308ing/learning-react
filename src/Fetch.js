@@ -1,18 +1,17 @@
 import React from "react"
-import { useFetch } from "./useFetch";
+import { useFetch } from "./hooks/useFetch";
 
-export const Fetch = ( {
+export default function Fetch ( {
   uri,
-  renderData,
+  renderSuccess,
   renderLoading = <p>Loading..</p>,
-  renderError = error => <pre>Something went wrong... {error.message}</pre>
-} ) => {
+  renderError = error => <pre>Something went wrong... { error.message }</pre>
+} ) {
   const { data, loading, error } = useFetch( uri );
-
-  if ( loading ) return renderLoading
 
   if ( error ) return renderError(error)
 
-  if ( data ) return renderData( {data} )
+  if ( loading ) return renderLoading
 
+  if ( data ) return renderSuccess( {data} )
 }
