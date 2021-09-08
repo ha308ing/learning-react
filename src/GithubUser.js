@@ -20,21 +20,23 @@ export default function GithubUser( { login = "eve", repo } ) {
   const repoFetch = useFetch( repoUri )
 
   const loadReadmeText = useCallback( async () => {
-    fetch( repoReadmeUri ).
-    // switch then to await
-      then( async ( response ) => {
-        if ( [ 403, 404 ].includes( response.status ) ) {
-          setReadmeText( 'no repo' )
-          const { errorMessage } = await response.json()
-          throw new Error( `failed to load README file from ${ repo_ } repo. Error: ${ response.status }: ${ errorMessage }` )
-        }
-        return response.json()
-      } ).
-      then( j => { const { download_url } = j; return download_url } ).
-      then( d => fetch( d ). //add error handler, switch to hook
-        then( t => t.text() ).
-        then( setReadmeText )
-      ).catch( console.warn )
+    try {
+      const request = await fetch( repoReadmeUri )
+      const { status } = request
+      const response = await request.json()
+
+      if ( [ 403, 404 ].includes( status ) ) {
+        setReadmeText( 'no repo' )
+        const { message } = response
+        throw Error( `failed to load README file from ${ repo_ } repo. Error: ${ status }: ${ message }` )
+      }
+
+      const { download_url } = response
+      const readmeContent = await (await fetch( download_url )).text()
+      setReadmeText( readmeContent ) 
+    } catch( error ) {
+      console.warn( error )
+    }
   }, [ repo_ ] )
 
   useEffect( () => {
