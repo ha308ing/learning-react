@@ -5,13 +5,13 @@ import UserDetails from "./UserDetails"
 import RepoMenu from "./RepoMenu"
 import ReactMarkdown from "react-markdown"
 
-export default function GithubUser( { login = "eve" } ) {
+export default function GithubUser( { login = "eve", repo } ) {
   const [ login_, setUser ] = useState( login )
-  const [ repo, setRepo ] = useState()
+  const [ repo_, setRepo ] = useState(repo)
 
   const userUri = useMemo( () => `https://api.github.com/users/${ login_ }`, [ login_ ])
   const repoUri = useMemo( () => `https://api.github.com/users/${ login_ }/repos`, [ login_ ])
-  const repoReadmeUri = useMemo( () => `https://api.github.com/repos/${ login_ }/${ repo }/readme`, [ login_, repo ])
+  const repoReadmeUri = useMemo( () => `https://api.github.com/repos/${ login_ }/${ repo_ }/readme`, [ login_, repo_ ])
 
   // avoid state for cuz its computable
   const [ readmeText, setReadmeText ] = useState()
@@ -26,7 +26,7 @@ export default function GithubUser( { login = "eve" } ) {
         if ( [ 403, 404 ].includes( response.status ) ) {
           setReadmeText( 'no repo' )
           const { errorMessage } = await response.json()
-          throw new Error( `failed to load README file from ${ repo } repo. Error: ${ response.status }: ${ errorMessage }` )
+          throw new Error( `failed to load README file from ${ repo_ } repo. Error: ${ response.status }: ${ errorMessage }` )
         }
         return response.json()
       } ).
@@ -35,18 +35,18 @@ export default function GithubUser( { login = "eve" } ) {
         then( t => t.text() ).
         then( setReadmeText )
       ).catch( console.warn )
-  }, [ repo ] )
+  }, [ repo_ ] )
 
   useEffect( () => {
-    if ( !login_ || !repo ) return
+    if ( !login_ || !repo_ ) return
     loadReadmeText()
-  }, [ repo ] )
+  }, [ repo_ ] )
 
   return (
     <>
       <UserSearch handleSearch={ setUser } user={ login_ } />
       { userFetch.data && <UserDetails data={ userFetch.data } /> }
-      { repoFetch.data && <RepoMenu onSelect={ setRepo } repos={ repoFetch.data } login={ login_ } /> }
+      { repoFetch.data && <RepoMenu onSelect={ setRepo } repositories={ repoFetch.data } login={ login_ } /> }
       <ReactMarkdown>{ readmeText }</ReactMarkdown>
     </>
   )
