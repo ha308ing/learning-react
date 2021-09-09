@@ -9,9 +9,14 @@ export const useFetch = ( uri )  => {
     if( !uri ) return
     if( !data ) {
       fetch( uri ).
-        then( response => response.json() ).
-        then( setData ).
-        then( () => setLoading( false ) ).
+      then( async( response ) => {
+        const { status } = response
+        const responseJSON = await response.json()
+        const { message } = responseJSON
+        if ( status !== 200 ) {
+          throw `Failed to fetch ${uri}.\nError: ${status}:\n${message}`
+        }
+        return responseJSON } ).
         catch( setError )
     }
   }, [uri] )

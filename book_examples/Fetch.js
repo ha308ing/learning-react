@@ -5,7 +5,7 @@ export default function Fetch ( {
   uri,
   renderSuccess,
   renderLoading = <p>Loading..</p>,
-  renderError = error => <pre>{ JSON.stringify( error, null, 2 ) }</pre>
+  renderError = error => <pre>{ error }</pre>
 } ) {
   const { data, loading, error } = useFetch( uri );
 
