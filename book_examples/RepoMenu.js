@@ -1,9 +1,14 @@
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import { useIterator } from "./hooks/useIterator"
 
+export default function RepoMenu( { repositories, selected, onSelect = f => f } ) {
 
-export default function RepoMenu( { repositories, login } ) {
-  const [ { name }, previous, next ] = useIterator( repositories )
+  const index = useCallback( (  ) => {
+    let s = repositories.findIndex( repo => repo.name === selected )
+    return s !== -1 ? s : null
+  }, [ repositories, selected ] )
+
+  const [ { name }, previous, next ] = useIterator( repositories, index )
 
   return (
     <>
