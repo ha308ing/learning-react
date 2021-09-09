@@ -2,8 +2,7 @@ import React, { useState, useCallback, useEffect } from "react"
 import ReactMarkdown from "react-markdown"
 
 export default function RepositoryReadme( { login, repo } ) {
-  const [ loading, setLoading ] = useState( false )
-  const [ error, setError ] = useState()
+  const [ error, setError ] = useState(  )
   const [ markdown, setMarkdown ] = useState( "" )
 
   const loadReadme = useCallback( async ( login, repo ) => {
