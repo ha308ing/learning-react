@@ -7,7 +7,7 @@ export default function Fetch ( {
   renderLoading = <p>Loading..</p>,
   renderError = error => <pre>{ error }</pre>
 } ) {
-  const { data, loading, error } = useFetch( uri );
+  const { data, loading, error } = useFetch( uri )
 
   if ( loading ) return renderLoading
 
