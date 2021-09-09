@@ -1,15 +1,16 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import GithubUser from "./GithubUser"
+import App from "../book_examples/index"
 
-export default function App() {
+export default function Default() {
   // return (
   //   <GithubUsers
   //     users={[ "stoically", "rkodey", "sbine" , "VadAbel" ]}
   //   />
   // )
 
-  return <GithubUser login="moontahoe"/>
+  // return <GithubUser login="moontahoe"/>
+  return <App />
 }
 
-ReactDOM.render( <App />, document.querySelector( "#root" ) )
+ReactDOM.render( <Default />, document.querySelector( "#root" ) )
