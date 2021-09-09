@@ -10,6 +10,10 @@ export default function RepoMenu( { repositories, selected, onSelect = f => f } 
 
   const [ { name }, previous, next ] = useIterator( repositories, index )
 
+  useEffect( () => {
+    onSelect( name )
+  }, [ name ])
+
   return (
     <>
       <div style={{ display:"flex" }}>
