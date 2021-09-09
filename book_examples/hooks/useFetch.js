@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react"
+import { useMountedRef } from "./useMountedRef"
 
 export const useFetch = ( uri )  => {
   const [ data, setData ] = useState(  )
   const [ loading, setLoading ] = useState( true )
   const [ error, setError ] = useState(  )
   
+  const mounted = useMountedRef()
   useEffect( () => { ( async function () {
     if( !uri ) return
-    if( !data ) {
-      fetch( uri ).
+    if( !mounted.current ) return
+        if ( !mounted.current ) throw "Component is not mounted" 
       then( async( response ) => {
         const { status } = response
         const responseJSON = await response.json()
@@ -21,6 +23,7 @@ export const useFetch = ( uri )  => {
       then( () => setLoading( false ) ).
       then( () => setError( false ) ).
       catch( error => {
+        if ( !mounted.current ) return
         console.warn(error)
         setError( error )
         setData( null )
