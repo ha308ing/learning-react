@@ -1,6 +1,6 @@
 import React from "react"
 import { useIterator } from "./hooks/useIterator"
-import RepositoryReadme from "./RepositoryReadme"
+
 
 export default function RepoMenu( { repositories, login } ) {
   const [ { name }, previous, next ] = useIterator( repositories )
@@ -12,7 +12,6 @@ export default function RepoMenu( { repositories, login } ) {
         <p>{ name }</p>
         <button onClick={ next }>&gt;</button>
       </div>
-      <RepositoryReadme login={ login } repo={ name } />
     </>
   )
 }
