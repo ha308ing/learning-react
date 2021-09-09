@@ -11,6 +11,7 @@
   - [9. Virtualized Lists](#9-virtualized-lists)
   - [10. Fetch Hook](#10-fetch-hook)
   - [11. Fetch Component](#11-fetch-component)
+  - [12. GraphQL](#12-graphql)
 
 ## 1. Sending Data with a request
 
@@ -316,5 +317,33 @@ export const GithubUser = ( { login } ) => {
       renderLoading={<LoadingSpinner />}
     />
   )
+}
+```
+
+## 12. GraphQL
+
+`https://api.github.com/graphql`
+
+```
+query user( $login: String! ) {
+  user ( login: $login ) {
+    login
+    name
+    location
+    avatar_url: avatarUrl
+    repositories ( first: 5 ) {
+      totalCount
+      nodes {
+        name
+      }
+    }
+  }
+}
+```
+
+query variables:
+```
+{
+  "login": "moontahoe"
 }
 ```
