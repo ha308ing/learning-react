@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react"
 import ReactMarkdown from "react-markdown"
 
 export default function RepositoryReadme( { login, repo } ) {
+  const [ loading, setLoading ] = useState( true ) // ? false
   const [ error, setError ] = useState(  )
   const [ markdown, setMarkdown ] = useState( "" )
 
@@ -19,14 +20,18 @@ export default function RepositoryReadme( { login, repo } ) {
     setLoading( false)
   }, [  ] )
 
-  useEffect( () => { 
+  useEffect( (  ) => { 
     if ( !login || !repo ) return
-    loadReadme( login, repo ).catch( e => setError( new Error( e ) ) )
+    loadReadme( login, repo ).
+      catch( error => {
+        console.warn( error )
+        setLoading( false )
+        setError( error )
+        setMarkdown( "" )
+      } )
    }, [ repo ])
 
-   if (error) return <pre>{ JSON.stringify( error, null, 2 ) }</pre>
-
-  if ( loading ) return <p>Loading..</p>
+   if ( loading ) return <p>Loading..</p>
 
    if ( error ) return <pre style={{ whiteSpace:"break-spaces" }}>{ error }</pre>
 
