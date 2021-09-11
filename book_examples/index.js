@@ -4,6 +4,10 @@ import GithubUser from "./GithubUser"
 import UserRerositories from "./UserRepositories"
 import RepositoryReadme from "./RepositoryReadme"
 // import { GraphQLClient } from "graphql-request"
+import ConditionalRender from "./ConditionalRender"
+import List from "./List"
+import renderStars from "./utils/renderStars"
+import useGraphQL from "./hooks/useGraphQL"
 
 export default function App() {
   const [ login, setLogin ] = useState( "moontahoe" )
@@ -68,6 +72,9 @@ export default function App() {
   //         set_gql_response( "" )
   //       } )
   //   }, [ login ] )
+
+  const status = useGraphQL( login )
+
   const handleSearch = login => {
     if ( login ) return setLogin(login)
     setLogin( "" )
@@ -91,6 +98,19 @@ export default function App() {
           
         }})()
       } */}
+      <ConditionalRender { ...status} >
+        <img src={ status.data.avatar_url } width={ 100 } alt={ status.data.login } />
+        <List
+          items={ status.data.repos }
+          renderItem={ ( { name, stars } ) => (
+            <span
+              style={ name === repo ? { color:"red" } : { cursor:"pointer" } }
+              onClick={
+                (  ) => name === repo ? alert( "hi" ) : setRepo( name ) } >{ name } { renderStars( stars ) }
+            </span> )
+          }
+        />
+      </ConditionalRender>
     </>
   )
 }
