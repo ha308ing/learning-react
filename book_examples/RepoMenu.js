@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useMemo, useEffect  } from "react"
 import { useIterator } from "./hooks/useIterator"
 
 export default function RepoMenu( { repositories, selected, onSelect = f => f } ) {
 
-  const index = useCallback( (  ) => {
+  const index = useMemo( (  ) => {
     let s = repositories.findIndex( repo => repo.name === selected )
     return s !== -1 ? s : null
   }, [ repositories, selected ] )
