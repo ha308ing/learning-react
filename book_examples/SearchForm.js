@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-export default function SearchForm( { value, onSearch } ) {
+export default function SearchForm( { value = "", onSearch } ) {
   const [ login_, setLogin ] = useState( value )
 
   return (
