@@ -5,8 +5,8 @@ import UserRerositories from "./UserRepositories"
 import RepositoryReadme from "./RepositoryReadme"
 
 export default function App() {
-  const [ login, setLogin ] = useState(  )
-  const [ repo, setRepo ] = useState(  )
+  const [ login, setLogin ] = useState( "moontahoe" )
+  const [ repo, setRepo ] = useState( "quic" )
 
   const handleSearch = login => {
     if ( login ) return setLogin(login)
