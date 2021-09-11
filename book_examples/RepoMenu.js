@@ -6,7 +6,7 @@ export default function RepoMenu( { repositories, selected, onSelect = f => f } 
   const index = useMemo( (  ) => {
     let s = repositories.findIndex( repo => repo.name === selected )
     return s !== -1 ? s : null
-  }, [ repositories, selected ] )
+  }, [ selected ] )
 
   const [ { name }, previous, next ] = useIterator( repositories, index )
 
