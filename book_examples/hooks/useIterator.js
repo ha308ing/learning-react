@@ -1,10 +1,15 @@
-import React, { useState, useCallback, useMemo } from "react"
+import React, { useState, useCallback, useMemo, useEffect } from "react"
 
 export const useIterator = (
   items = [],
   initialValue = 0
 ) => {
   const [ i, setIndex ] = useState( initialValue )
+
+  useEffect(
+    (  ) => setIndex( initialValue ),
+    [initialValue]
+  )
 
   const prev = useCallback( () => {
     if ( i === 0 ) return setIndex( items.length - 1 )
